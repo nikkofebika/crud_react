@@ -17,7 +17,17 @@ const App = () => {
 
   useEffect(() => {
     console.log('anying');
-    fetch('http://127.0.0.1:8080/users').then(res => console.log('res', res));
+    fetch('https://reactnative.dev/movies.json')
+      .then(response => {
+        response.json();
+        console.log('okeokeoke', response.json());
+      })
+      .then(json => {
+        return json.movies;
+      })
+      .catch(error => {
+        console.error('error', error);
+      });
   });
   return (
     <SafeAreaView style={{padding: 20}}>
