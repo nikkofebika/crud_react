@@ -1,0 +1,15 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Nikko Fe",
+            "email": "nikko@gmail.com",
+            "age": 24
+        },{
+            "id": 2,
+            "name": "Aliya Kartika",
+            "email": "aliya@gmail.com",
+            "age": 8
+        }
+    ]
+}
