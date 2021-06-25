@@ -23,24 +23,6 @@
       "age": "11",
       "email": "kris@gmail.com",
       "id": 4
-    },
-    {
-      "name": "",
-      "age": null,
-      "email": "",
-      "id": 5
-    },
-    {
-      "name": "",
-      "age": null,
-      "email": "",
-      "id": 6
-    },
-    {
-      "name": "",
-      "age": null,
-      "email": "",
-      "id": 7
     }
   ]
 }
