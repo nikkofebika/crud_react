@@ -11,7 +11,6 @@ import {
   Button,
   Image,
   TouchableOpacity,
-  Form,
 } from 'react-native';
 
 const App = () => {
@@ -19,6 +18,7 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [age, setAge] = useState(null);
   const [data, setData] = useState([]);
+  const [button, setButton] = useState('Simpan');
 
   useEffect(() => {
     console.log('useEffect 1');
@@ -27,7 +27,7 @@ const App = () => {
 
   const getData = () => {
     axios
-      .get('http://10.0.2.2:3004/users')
+      .get('https://my-json-server.typicode.com/nikkofebika/crud_react/users')
       .then(res => {
         console.log('fetch data', res);
         setData(res.data);
@@ -42,11 +42,15 @@ const App = () => {
       email,
     });
     axios
-      .post('http://10.0.2.2:3004/users', data, {
-        headers: {
-          'Content-Type': 'application/json',
+      .post(
+        'https://my-json-server.typicode.com/nikkofebika/crud_react/users',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      )
       .then(response => {
         console.log(response);
         setName('');
@@ -58,6 +62,14 @@ const App = () => {
         console.log(error);
       });
     console.log('data submit', data);
+  };
+
+  const showData = user => {
+    console.log('selected user', user);
+    setName(user.name);
+    setEmail(user.email);
+    setAge(user.age.toString());
+    setButton('Update');
   };
   return (
     <SafeAreaView style={{padding: 20}}>
@@ -84,7 +96,7 @@ const App = () => {
           style={styles.inputan}
         />
         <Button
-          title="Simpan"
+          title={button}
           color="green"
           accessibilityLabel="Learn more about this purple button"
           onPress={handleSubmit}
@@ -100,6 +112,7 @@ const App = () => {
               name={user.name}
               email={user.email}
               age={user.age}
+              onPress={() => showData(user)}
             />
           );
         })}
@@ -108,15 +121,17 @@ const App = () => {
   );
 };
 
-const Card = ({name, email, age}) => {
+const Card = ({name, email, age, onPress, onDelete}) => {
   return (
     <View style={styles.card}>
-      <Image
-        style={styles.cardImage}
-        source={{
-          uri: 'https://reactnative.dev/img/tiny_logo.png',
-        }}
-      />
+      <TouchableOpacity onPress={onPress}>
+        <Image
+          style={styles.cardImage}
+          source={{
+            uri: 'https://reactnative.dev/img/tiny_logo.png',
+          }}
+        />
+      </TouchableOpacity>
       <View style={styles.cardDetail}>
         <Text style={{fontWeight: 'bold', fontSize: 16}}>{name}</Text>
         <Text>{email}</Text>
@@ -128,10 +143,10 @@ const Card = ({name, email, age}) => {
           alignItems: 'flex-end',
           justifyContent: 'space-around',
         }}>
-        <TouchableOpacity onPress={() => alert('edit')}>
+        {/* <TouchableOpacity onPress={onPress}>
           <Text style={styles.btnEdit}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Hapus')}>
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={onDelete}>
           <Text style={styles.btnDelete}>Hapus</Text>
         </TouchableOpacity>
       </View>
