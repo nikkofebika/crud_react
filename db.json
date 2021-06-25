@@ -1,15 +1,46 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "Nikko Fe",
-            "email": "nikko@gmail.com",
-            "age": 24
-        },{
-            "id": 2,
-            "name": "Aliya Kartika",
-            "email": "aliya@gmail.com",
-            "age": 8
-        }
-    ]
+  "users": [
+    {
+      "id": 1,
+      "name": "Nikko Fe",
+      "email": "nikko@gmail.com",
+      "age": 24
+    },
+    {
+      "id": 2,
+      "name": "Aliya Kartika",
+      "email": "aliya@gmail.com",
+      "age": 8
+    },
+    {
+      "name": "joni stark",
+      "age": "50",
+      "email": "joni@gmail.com",
+      "id": 3
+    },
+    {
+      "name": "chris",
+      "age": "11",
+      "email": "kris@gmail.com",
+      "id": 4
+    },
+    {
+      "name": "",
+      "age": null,
+      "email": "",
+      "id": 5
+    },
+    {
+      "name": "",
+      "age": null,
+      "email": "",
+      "id": 6
+    },
+    {
+      "name": "",
+      "age": null,
+      "email": "",
+      "id": 7
+    }
+  ]
 }
