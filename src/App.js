@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,51 +11,73 @@ import {
   Button,
   Image,
   TouchableOpacity,
+  Form
 } from 'react-native';
 
 const App = () => {
-  const [data, setData] = useState({});
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log('anying');
-    fetch('https://reactnative.dev/movies.json')
-      .then(response => {
-        response.json();
-        console.log('okeokeoke', response.json());
-      })
-      .then(json => {
-        return json.movies;
-      })
-      .catch(error => {
-        console.error('error', error);
-      });
-  });
+    console.log('useEffect 1')
+    getData();
+  }, []);
+
+  const getData = () => {
+    axios.get('https://my-json-server.typicode.com/nikkofebika/crud_react/users').then(res => {
+      console.log('fetch data', res)
+      setData(res.data);
+    }).catch(error => console.log('error fetch users', error));
+  }
+
+  const handleSubmit = () => {
+    const data = JSON.stringify({
+      name, age, email
+    })
+    axios.post('https://my-json-server.typicode.com/nikkofebika/crud_react/users', data, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(response => {
+      console.log(response);
+      setName("");
+      setEmail("");
+      setAge(null);
+      getData();
+    }).catch(error => {
+      console.log(error);
+    });
+    console.log('data submit', data)
+  }
   return (
-    <SafeAreaView style={{padding: 20}}>
+    <SafeAreaView style={{ padding: 20 }}>
       <StatusBar backgroundColor="#f0f" />
       <Text style={styles.headTitle}>TUTORIAL CRUD REACT NATIVE</Text>
       <View>
-        <TextInput placeholder="Nama Lengkap" style={styles.inputan} />
-        <TextInput placeholder="Alamat Email" style={styles.inputan} />
-        <TextInput placeholder="Usia" style={styles.inputan} />
+        <TextInput value={name} onChangeText={val => setName(val)} placeholder="Nama Lengkap" style={styles.inputan} />
+        <TextInput value={email} onChangeText={val => setEmail(val)} placeholder="Alamat Email" style={styles.inputan} />
+        <TextInput value={age} onChangeText={val => setAge(val)} placeholder="Usia" keyboardType="numeric" style={styles.inputan} />
         <Button
           title="Simpan"
           color="green"
           accessibilityLabel="Learn more about this purple button"
+          onPress={handleSubmit}
           style={styles.buttonSubmit}
         />
       </View>
-      <View style={{height: 1, backgroundColor: 'black', marginVertical: 10}} />
-      {/* <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {data.map((user, i) => {
-          return <Card />;
+      <View style={{ height: 1, backgroundColor: 'black', marginVertical: 10 }} />
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        {data.map(user => {
+          return <Card key={user.id} name={user.name} email={user.email} age={user.age} />;
         })}
-      </ScrollView> */}
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
-const Card = () => {
+const Card = ({ name, email, age }) => {
   return (
     <View style={styles.card}>
       <Image
@@ -64,9 +87,9 @@ const Card = () => {
         }}
       />
       <View style={styles.cardDetail}>
-        <Text style={{fontWeight: 'bold', fontSize: 16}}>Nama Lengkap</Text>
-        <Text>EMail</Text>
-        <Text>Usia</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{name}</Text>
+        <Text>{email}</Text>
+        <Text>Usia {age} Th</Text>
       </View>
       <View
         style={{
