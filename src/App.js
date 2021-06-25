@@ -11,9 +11,11 @@ import {
   Button,
   Image,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 
 const App = () => {
+  const [selectedId, setSelectedId] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [age, setAge] = useState(null);
@@ -36,20 +38,75 @@ const App = () => {
   };
 
   const handleSubmit = () => {
-    const data = JSON.stringify({
+    Keyboard.dismiss();
+    const data = {
       name,
       age,
       email,
-    });
-    axios
-      .post(
-        'https://my-json-server.typicode.com/nikkofebika/crud_react/users',
-        data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
+    };
+    console.log('data submit', data);
+    if (selectedId !== null) {
+      console.log('update data bro');
+      axios
+        .put(
+          `https://my-json-server.typicode.com/nikkofebika/crud_react/users/${selectedId}`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        },
+        )
+        .then(response => {
+          console.log(response);
+          setName('');
+          setEmail('');
+          setAge(null);
+          setSelectedId(null);
+          setButton('Simpan');
+          getData();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      axios
+        .post(
+          'https://my-json-server.typicode.com/nikkofebika/crud_react/users',
+          data,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .then(response => {
+          console.log(response);
+          setName('');
+          setEmail('');
+          setAge(null);
+          getData();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  };
+
+  const showData = user => {
+    console.log('selected user', user);
+    setSelectedId(user.id);
+    setName(user.name);
+    setEmail(user.email);
+    setAge(user.age.toString());
+    setButton('Update');
+  };
+
+  const handleDelete = id => {
+    console.log('deleted user', id);
+    axios
+      .delete(
+        `https://my-json-server.typicode.com/nikkofebika/crud_react/users/${id}`,
       )
       .then(response => {
         console.log(response);
@@ -61,15 +118,6 @@ const App = () => {
       .catch(error => {
         console.log(error);
       });
-    console.log('data submit', data);
-  };
-
-  const showData = user => {
-    console.log('selected user', user);
-    setName(user.name);
-    setEmail(user.email);
-    setAge(user.age.toString());
-    setButton('Update');
   };
   return (
     <SafeAreaView style={{padding: 20}}>
@@ -113,6 +161,7 @@ const App = () => {
               email={user.email}
               age={user.age}
               onPress={() => showData(user)}
+              onDelete={() => handleDelete(user.id)}
             />
           );
         })}
