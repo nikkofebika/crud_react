@@ -19,6 +19,7 @@ const App = () => {
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(null);
   const [data, setData] = useState([]);
+  const [button, setButton] = useState('Simpan')
 
   useEffect(() => {
     console.log('useEffect 1')
@@ -51,6 +52,14 @@ const App = () => {
     });
     console.log('data submit', data)
   }
+
+  const showData = (user) => {
+    console.log('selected user', user)
+    setName(user.name);
+    setEmail(user.email);
+    setAge(user.age.toString());
+    setButton('Update')
+  }
   return (
     <SafeAreaView style={{ padding: 20 }}>
       <StatusBar backgroundColor="#f0f" />
@@ -60,7 +69,7 @@ const App = () => {
         <TextInput value={email} onChangeText={val => setEmail(val)} placeholder="Alamat Email" style={styles.inputan} />
         <TextInput value={age} onChangeText={val => setAge(val)} placeholder="Usia" keyboardType="numeric" style={styles.inputan} />
         <Button
-          title="Simpan"
+          title={button}
           color="green"
           accessibilityLabel="Learn more about this purple button"
           onPress={handleSubmit}
@@ -70,22 +79,24 @@ const App = () => {
       <View style={{ height: 1, backgroundColor: 'black', marginVertical: 10 }} />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {data.map(user => {
-          return <Card key={user.id} name={user.name} email={user.email} age={user.age} />;
+          return <Card key={user.id} name={user.name} email={user.email} age={user.age} onPress={() => showData(user)} />;
         })}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const Card = ({ name, email, age }) => {
+const Card = ({ name, email, age, onPress, onDelete }) => {
   return (
     <View style={styles.card}>
-      <Image
-        style={styles.cardImage}
-        source={{
-          uri: 'https://reactnative.dev/img/tiny_logo.png',
-        }}
-      />
+      <TouchableOpacity onPress={onPress}>
+        <Image
+          style={styles.cardImage}
+          source={{
+            uri: 'https://reactnative.dev/img/tiny_logo.png',
+          }}
+        />
+      </TouchableOpacity>
       <View style={styles.cardDetail}>
         <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{name}</Text>
         <Text>{email}</Text>
@@ -97,10 +108,10 @@ const Card = ({ name, email, age }) => {
           alignItems: 'flex-end',
           justifyContent: 'space-around',
         }}>
-        <TouchableOpacity onPress={() => alert('edit')}>
+        {/* <TouchableOpacity onPress={onPress}>
           <Text style={styles.btnEdit}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Hapus')}>
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={onDelete}>
           <Text style={styles.btnDelete}>Hapus</Text>
         </TouchableOpacity>
       </View>
